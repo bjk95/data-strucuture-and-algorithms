@@ -1,5 +1,4 @@
-fn find_max_consecutive_ones(nums: Vec<i32>) -> i32 {
-    let mut count = 0;
+fn find_max_consecutive_ones(nums: Vec<i32>) -> i32 { let mut count = 0;
     let mut max_count = 0;
     for n in nums {
         if n == 1 {
@@ -30,6 +29,13 @@ fn find_numbers(nums: Vec<i32>) -> i32 {
     }
     count
 }
+
+fn sorted_squares(nums: Vec<i32>) -> Vec<i32> {
+    let mut squared: Vec<i32> = nums.iter().map(|n| n*n ).collect();
+    squared.sort();
+    squared
+}
+
 #[cfg(test)]
 mod array_tests {
     use super::*;
@@ -66,5 +72,12 @@ mod array_tests {
     fn find_3_evens() {
         let nums = vec![1, 20, 300, 666, 4000, 600000];
         assert_eq!(find_numbers(nums), 3)
+    }
+
+    #[test]
+    fn test_sqaures(){
+        let nums = vec![1,2,3,4];
+        let expected_result = vec![1,4,9,16];
+        assert_eq!(sorted_squares(nums), expected_result)
     }
 }
