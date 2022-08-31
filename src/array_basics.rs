@@ -1,4 +1,5 @@
-fn find_max_consecutive_ones(nums: Vec<i32>) -> i32 { let mut count = 0;
+fn find_max_consecutive_ones(nums: Vec<i32>) -> i32 {
+    let mut count = 0;
     let mut max_count = 0;
     for n in nums {
         if n == 1 {
@@ -24,14 +25,14 @@ fn find_numbers(nums: Vec<i32>) -> i32 {
     let mut count = 0;
     for n in nums {
         if number_of_digits(n) % 2 == 0 {
-           count += 1;
+            count += 1;
         }
     }
     count
 }
 
 fn sorted_squares(nums: Vec<i32>) -> Vec<i32> {
-    let mut squared: Vec<i32> = nums.iter().map(|n| n*n ).collect();
+    let mut squared: Vec<i32> = nums.iter().map(|n| n * n).collect();
     squared.sort();
     squared
 }
@@ -61,12 +62,12 @@ mod array_tests {
     fn three_digits() {
         assert_eq!(number_of_digits(555), 3)
     }
-    
-        #[test]
-        fn find_1_even(){
-            let nums = vec![1,20,300];
-            assert_eq!(find_numbers(nums), 1)
-        }
+
+    #[test]
+    fn find_1_even() {
+        let nums = vec![1, 20, 300];
+        assert_eq!(find_numbers(nums), 1)
+    }
 
     #[test]
     fn find_3_evens() {
@@ -75,9 +76,9 @@ mod array_tests {
     }
 
     #[test]
-    fn test_sqaures(){
-        let nums = vec![1,2,3,4];
-        let expected_result = vec![1,4,9,16];
+    fn test_sqaures() {
+        let nums = vec![1, 2, 3, 4];
+        let expected_result = vec![1, 4, 9, 16];
         assert_eq!(sorted_squares(nums), expected_result)
     }
 }
