@@ -1,5 +1,5 @@
-#![allow(dead_code)]
 
+#![allow(dead_code)]
 mod array_basics;
 mod array_insertion;
 mod linked_list;

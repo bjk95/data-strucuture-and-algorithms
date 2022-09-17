@@ -77,7 +77,7 @@ impl<T> LinkedList<T> {
         if self.head.is_some() {
             /*
             let new_last_node = LinkedListNode{
-                data: new_data,
+                data: _data,
                 next: None,
             };
 
@@ -166,9 +166,7 @@ mod linked_link_tests {
     #[test]
     fn append_one_item_to_list() {
         let mut list = LinkedList::new();
-        list.append(e1());
-        println!("{:?}", list);
-        assert_eq!(list.head(), &e1())
+        list.append(e1()); println!("{:?}", list); assert_eq!(list.head(), &e1())
     }
 
     #[test]
