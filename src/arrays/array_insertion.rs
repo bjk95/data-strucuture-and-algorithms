@@ -10,25 +10,14 @@ fn duplicate_zeros(arr: &mut Vec<i32>) {
     arr.resize(length, 0)
 }
 
-fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
-    let mut offset = 0;
-    for index in 0..nums1.capacity() {
-        if index + offset > m as usize {
-            break;
-        };
-        for n2 in &mut *nums2 {
-            if Some(&n2.clone()) >= nums1.get(index + offset)
-                && (Some(&n2.clone()) <= nums1.get(index + offset + 1)
-                    || nums1.get(index + offset + 1) == Some(&0))
-            {
-                nums1.insert(index + offset + 1, *n2);
-                nums1.remove((m + n) as usize);
-                offset += 1
-            }
-        }
-    }
+pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
+    let _zeros = nums1.split_off(m as usize);
+    let mut a: Vec<i32> = nums1.iter().map(|n| n.clone()).collect();
+    a.append(nums2);
+    a.sort();
+    nums1.clear();
+    nums1.append(&mut a)
 }
-
 #[cfg(test)]
 mod array_insertion_tests {
     use super::*;
@@ -56,7 +45,7 @@ mod array_insertion_tests {
         duplicate_zeros(&mut two_zeros);
         assert_eq!(two_zeros, result)
     }
-    /*
+    
     #[test]
     fn merge_test() {
         let mut nums1: Vec<i32> = vec![1, 2, 3, 0, 0, 0];
@@ -65,5 +54,5 @@ mod array_insertion_tests {
         merge(&mut nums1, 3, &mut nums2, 3);
         assert_eq!(nums1, result)
     }
-    */
+    
 }

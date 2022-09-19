@@ -184,6 +184,6 @@ mod load_balancer_tests{
         assert_eq!(machine_4_application, vec![1,2]);
         lb.remove_machine(4);
         let machine_2_applications = lb.get_applications(2);
-        assert_eq!(machine_2_applications, vec![6])
+        assert_eq!(machine_2_applications, vec![6, 1])
     }
 }
