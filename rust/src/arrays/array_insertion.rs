@@ -45,7 +45,7 @@ mod array_insertion_tests {
         duplicate_zeros(&mut two_zeros);
         assert_eq!(two_zeros, result)
     }
-    
+
     #[test]
     fn merge_test() {
         let mut nums1: Vec<i32> = vec![1, 2, 3, 0, 0, 0];
@@ -54,5 +54,4 @@ mod array_insertion_tests {
         merge(&mut nums1, 3, &mut nums2, 3);
         assert_eq!(nums1, result)
     }
-    
 }

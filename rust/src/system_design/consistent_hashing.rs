@@ -1,4 +1,4 @@
-use std::{collections::HashSet};
+use std::collections::HashSet;
 
 struct ConsistentHashing {
     pub nodes: Vec<Node>,
@@ -9,7 +9,7 @@ struct Node {
     id: i32,
     parent: Option<i32>,
     children: HashSet<i32>,
-    keys: HashSet<i32>
+    keys: HashSet<i32>,
 }
 
 impl ConsistentHashing {
@@ -18,17 +18,18 @@ impl ConsistentHashing {
         let mut node_ids: Vec<i32> = (0..initialNodes).collect();
         node_ids.sort();
 
-
-        let nodes = node_ids.iter().map(|i| Node{
-            id: hash(&i),
-            parent: None,
-            children: HashSet::new(),
-            keys: HashSet::new()
-        }).collect();
+        let nodes = node_ids
+            .iter()
+            .map(|i| Node {
+                id: hash(&i),
+                parent: None,
+                children: HashSet::new(),
+                keys: HashSet::new(),
+            })
+            .collect();
 
         ConsistentHashing { nodes: nodes }
     }
-
 
     fn get_node_for_key(&mut self, key: i32) -> i32 {
         let (target_node_id, mut target_node) = self.get_key_node(key);
@@ -53,14 +54,14 @@ impl ConsistentHashing {
         let mut target_node = None;
         let mut target_node_id = 0;
         let hashed_key = hash(&key);
-        for  node in &self.nodes {
+        for node in &self.nodes {
             if target_node_id <= hashed_key && node.id > hashed_key {
                 break;
             } else {
                 target_node_id = node.id;
                 target_node = Some(node.clone());
             }
-        } 
+        }
         (hash(&target_node_id), target_node.unwrap())
     }
 
@@ -75,7 +76,7 @@ impl ConsistentHashing {
                 last_node += node.id;
             }
         }
-        hash(&last_node)  
+        hash(&last_node)
     }
 
     fn add_node(&mut self) -> Vec<i32> {
@@ -89,11 +90,11 @@ impl ConsistentHashing {
         self.update_node(parent_node.clone());
 
         // Add new node to cluster
-        let new_node = Node{
+        let new_node = Node {
             id: new_node_id,
             parent: Some(parent_id.clone()),
             children: HashSet::new(),
-            keys: parent_node.keys
+            keys: parent_node.keys,
         };
         self.nodes.push(new_node);
 
@@ -113,28 +114,25 @@ impl ConsistentHashing {
 
     fn get_node_for_replica(&self) -> Node {
         let mut ordered_nodes = self.nodes.clone();
-        ordered_nodes.sort_by(|a,b| a.children.len().cmp(&b.children.len()));
+        ordered_nodes.sort_by(|a, b| a.children.len().cmp(&b.children.len()));
         ordered_nodes.first().unwrap().to_owned()
     }
 
     fn get_last_primary_node(&self) -> Node {
         let mut last: Option<Node> = None;
         for node in &self.nodes {
-           match &last {
-            Some(n) => {
-                if n.parent.is_none() && n.id > node.id {
-                    last = Some(node.clone())
+            match &last {
+                Some(n) => {
+                    if n.parent.is_none() && n.id > node.id {
+                        last = Some(node.clone())
+                    }
                 }
-            },
-            None => {
-                last = Some(node.clone())
-            },
-        } 
+                None => last = Some(node.clone()),
+            }
         }
         last.unwrap()
     }
 }
-
 
 fn hash(key: &i32) -> i32 {
     key.swap_bytes()
@@ -151,13 +149,13 @@ mod consistent_hashing_tests {
     }
 
     #[test]
-    fn test_get_node_inserts(){
+    fn test_get_node_inserts() {
         let mut ch = ConsistentHashing::new(1);
         ch.get_node_for_key(10);
-        match ch.nodes.first(){
+        match ch.nodes.first() {
             Some(node) => {
                 assert!(node.keys.contains(&10))
-            },
+            }
             None => panic!(),
         }
     }
@@ -167,9 +165,9 @@ mod consistent_hashing_tests {
         let mut ch = ConsistentHashing::new(6);
         let first_result = ch.get_node_for_key(10);
         let second_result = ch.get_node_for_key(10);
-        assert_eq!(first_result,second_result)
+        assert_eq!(first_result, second_result)
     }
-        #[test]
+    #[test]
     fn test_get_node_above_range() {
         let mut ch = ConsistentHashing::new(5);
         let node = ch.get_node_for_key(13);
@@ -177,7 +175,7 @@ mod consistent_hashing_tests {
         assert_eq!(node, 4)
     }
     #[test]
-    fn test_hash_reverses(){
+    fn test_hash_reverses() {
         let initial_value = 3;
         let hashed = hash(&initial_value);
         let re_reversed = hash(&hashed);

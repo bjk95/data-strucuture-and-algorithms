@@ -40,7 +40,7 @@ impl LogAggregator {
         };
         // Insert new log
         self.logs.insert(log_id, new_log);
-        
+
         // Insert log ID into machine
         let existing_machine = self.machines.get(&machine_id);
 
@@ -51,7 +51,7 @@ impl LogAggregator {
         } else {
             self.machines.insert(machine_id, vec![log_id]);
         }
-        
+
         // Insert log ID into service index
         let existing_service = self.services.get(&service_id);
 
@@ -138,7 +138,7 @@ mod log_aggregator_tests {
         test_aggregator.push_log(4, 1, 3, "I'm a test".to_string());
         test_aggregator.push_log(5, 1, 4, "I'm a test".to_string());
 
-        assert_eq!(test_aggregator.get_logs_of_service(3), vec![3,4])
+        assert_eq!(test_aggregator.get_logs_of_service(3), vec![3, 4])
     }
 
     #[test]
