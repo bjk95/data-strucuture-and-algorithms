@@ -2,7 +2,7 @@ use crate::binary_trees::tree_node::TreeNode;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-pub fn preorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+pub fn preorder_traversal(root: &Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
     let items = Vec::new();
     match root {
         Some(node) => preorder_traverse(&node, items),
@@ -73,10 +73,10 @@ fn postorder_traverse(node: &Rc<RefCell<TreeNode>>, mut items: Vec<i32>) -> Vec<
     items
 }
 
-pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
+pub fn level_order(root: &Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
     let items: Vec<Vec<i32>> = Vec::new();
     match root {
-        Some(node) => level_order_traverse(vec![node], items),
+        Some(node) => level_order_traverse(vec![node.clone()], items),
         None => items,
     }
 }
@@ -165,7 +165,7 @@ mod traversing_tests {
     #[test]
     fn test_pre_order_traversal() {
         let expected_result = vec![6, 2, 1, 4, 3, 5, 7, 9, 8];
-        let result = preorder_traversal(Some(Rc::from(RefCell::from(test_tree()))));
+        let result = preorder_traversal(&Some(Rc::from(RefCell::from(test_tree()))));
         assert_eq!(result, expected_result)
     }
 
@@ -185,7 +185,7 @@ mod traversing_tests {
     #[test]
     fn test_bfs_traversal() {
         let expected_result = vec![1, 3, 5, 4, 2, 8, 9, 7, 6];
-        let result = level_order(Some(Rc::from(RefCell::from(test_tree()))));
+        let result = level_order(&Some(Rc::from(RefCell::from(test_tree()))));
         assert_eq!(expected_result, expected_result)
     }
 }

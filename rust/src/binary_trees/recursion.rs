@@ -1,6 +1,6 @@
 use std::{rc::Rc, cell::RefCell};
 
-use super::tree_node::TreeNode;
+use super::{tree_node::TreeNode, traversing::{preorder_traversal, level_order}};
 
 pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
     match root {
@@ -23,6 +23,31 @@ fn get_depth(node: &Rc<RefCell<TreeNode>>, current_depth: i32) -> i32 {
         left_depth
     } else {
         right_depth
+    }
+}
+
+pub fn is_symmetric(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+    match root {
+        Some(n) => {
+            let reflected = reflect_node(Some(&n)); 
+            Some(n.clone()) == reflected
+        },
+        None => false,
+    }   
+}
+
+fn reflect_node(node: Option<&Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+    match node {
+        Some(n) => {
+            let reflected_left = reflect_node(n.borrow().left.as_ref());
+            let reflected_right = reflect_node(n.borrow().right.as_ref());
+            Some(Rc::new(RefCell::new(TreeNode{
+                val: n.borrow().val,
+                left: reflected_right,
+                right: reflected_left,
+            })))
+        },
+        None => None,
     }
 }
 
@@ -84,5 +109,10 @@ mod binary_tree_recursion_test {
     fn test_max_depth(){
         let t = Some(Rc::new(RefCell::new(test_tree())));
         assert_eq!(max_depth(t), 4)
+    }
+    #[test]
+    fn test_symmetrical(){
+        let t = Some(Rc::new(RefCell::new(test_tree())));
+        assert_eq!(is_symmetric(t), false)
     }
 }
