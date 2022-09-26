@@ -35,20 +35,19 @@ pub fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
 }
 
 fn inorder_traverse(node: &Rc<RefCell<TreeNode>>, mut items: Vec<i32>) -> Vec<i32> {
-
     items = match &node.borrow().left {
         Some(left_node) => inorder_traverse(left_node, items),
         None => items,
     };
 
     items.push(node.borrow().val);
-    
+
     items = match &node.borrow().right {
         Some(right_node) => inorder_traverse(right_node, items),
         None => items,
     };
 
-    items 
+    items
 }
 pub fn postorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
     let items = Vec::new();
@@ -64,7 +63,6 @@ fn postorder_traverse(node: &Rc<RefCell<TreeNode>>, mut items: Vec<i32>) -> Vec<
         None => items,
     };
 
-    
     items = match &node.borrow().right {
         Some(right_node) => postorder_traverse(right_node, items),
         None => items,
@@ -72,7 +70,7 @@ fn postorder_traverse(node: &Rc<RefCell<TreeNode>>, mut items: Vec<i32>) -> Vec<
 
     items.push(node.borrow().val);
 
-    items 
+    items
 }
 
 pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
@@ -81,31 +79,31 @@ pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
         Some(node) => level_order_traverse(vec![node], items),
         None => items,
     }
-        
 }
 
-fn level_order_traverse(nodes: Vec<Rc<RefCell<TreeNode>>>, mut items: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+fn level_order_traverse(
+    nodes: Vec<Rc<RefCell<TreeNode>>>,
+    mut items: Vec<Vec<i32>>,
+) -> Vec<Vec<i32>> {
     let this_level_items: Vec<i32> = nodes.iter().map(|n| n.borrow().val).collect();
     items.push(this_level_items);
     let mut next_level_nodes: Vec<Rc<RefCell<TreeNode>>> = Vec::new();
     nodes.iter().for_each(|n| {
-        
-        match &n.borrow().left  {
-            Some(left_node) =>  next_level_nodes.push(Rc::clone(&left_node)),
-            None => {},
+        match &n.borrow().left {
+            Some(left_node) => next_level_nodes.push(Rc::clone(&left_node)),
+            None => {}
         };
         match &n.borrow().right {
             Some(right_node) => next_level_nodes.push(Rc::clone(&right_node)),
-            None => {},
+            None => {}
         }
     });
 
     if next_level_nodes.len() > 0 {
-        level_order_traverse(next_level_nodes, items)   
+        level_order_traverse(next_level_nodes, items)
     } else {
         items
     }
-
 }
 
 #[cfg(test)]
@@ -170,14 +168,14 @@ mod traversing_tests {
         let result = preorder_traversal(Some(Rc::from(RefCell::from(test_tree()))));
         assert_eq!(result, expected_result)
     }
-    
+
     #[test]
     fn test_inorder_traversal() {
-        let expected_result = vec![1,2,3,4,5,6,7,8,9];
+        let expected_result = vec![1, 2, 3, 4, 5, 6, 7, 8, 9];
         let result = inorder_traversal(Some(Rc::from(RefCell::from(test_tree()))));
         assert_eq!(result, expected_result)
     }
-    
+
     #[test]
     fn test_postorder_traversal() {
         let expected_result = vec![1, 3, 5, 4, 2, 8, 9, 7, 6];
