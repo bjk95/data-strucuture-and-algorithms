@@ -35,7 +35,7 @@ pub fn is_happy(n: i32) -> bool {
 pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
     let mut m: HashMap<&i32, HashSet<i32>> = HashMap::new();
     nums.iter().enumerate().for_each(|(index, num)| {
-        if  m.contains_key(&num) {
+        if m.contains_key(&num) {
             let mut updated_index_list = m.get(num).unwrap().to_owned();
             updated_index_list.insert(index as i32);
             m.insert(num, updated_index_list);
@@ -44,23 +44,20 @@ pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
             index_list.insert(index as i32);
             m.insert(num, index_list);
         }
-
     });
 
     let mut result = Vec::new();
-    for (index,num) in nums.iter().enumerate() {
-        if m.contains_key(&(target - num)){
-            let mut indices = m.get(&(target-num)).unwrap().clone();
+    for (index, num) in nums.iter().enumerate() {
+        if m.contains_key(&(target - num)) {
+            let mut indices = m.get(&(target - num)).unwrap().clone();
             indices.remove(&(index as i32));
-            if indices.len() >0 {
+            if indices.len() > 0 {
                 let a: Vec<&i32> = indices.iter().collect();
 
                 result = vec![index as i32, a.first().unwrap().clone().clone()];
                 break;
             }
-            
         }
-        
     }
     result
 }
