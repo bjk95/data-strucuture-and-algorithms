@@ -51,6 +51,41 @@ fn reflect_node(node: Option<&Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeN
     }
 }
 
+pub fn has_path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> bool {
+    let mut path_sums = Vec::new();
+    match root {
+        Some(n) => {
+            match (&n.borrow().left, &n.borrow().right) {
+                (Some(l), Some(r)) => {
+                    // println!("{:?}",n);
+                    get_path_sums(l, &mut path_sums,  n.borrow().val);
+                    get_path_sums(r, &mut path_sums, n.borrow().val);
+                },
+                (None, Some(r)) => get_path_sums(r, &mut path_sums, n.borrow().val),
+                (Some(l), None) => get_path_sums(l, &mut path_sums, n.borrow().val),
+                (None, None) => path_sums.push(n.borrow().val),
+            } 
+
+            let hits: Vec<&i32> = path_sums.iter().filter(|n| n.clone().clone() == target_sum).collect();
+            hits.first().is_some()
+        },
+        None => false,
+    }   
+   
+}
+
+fn get_path_sums(node: &Rc<RefCell<TreeNode>>, path_sums: &mut Vec<i32>, this_path_cumulative_sum: i32) {
+    match (&node.borrow().left, &node.borrow().right) {
+        (Some(l), Some(r)) => {
+            get_path_sums(l, path_sums,  this_path_cumulative_sum + node.borrow().val);
+            get_path_sums(r, path_sums, this_path_cumulative_sum + node.borrow().val);
+        },
+        (None, Some(r)) => get_path_sums(r, path_sums, this_path_cumulative_sum + node.borrow().val),
+        (Some(l), None) => get_path_sums(l, path_sums, this_path_cumulative_sum + node.borrow().val),
+        (None, None) => path_sums.push(this_path_cumulative_sum + node.borrow().val),
+    } 
+}
+
 #[cfg(test)]
 mod binary_tree_recursion_test {
     use super::*;
@@ -114,5 +149,11 @@ mod binary_tree_recursion_test {
     fn test_symmetrical(){
         let t = Some(Rc::new(RefCell::new(test_tree())));
         assert_eq!(is_symmetric(t), false)
+    }
+
+    #[test]
+    fn test_target_sum(){
+        let t = Some(Rc::new(RefCell::new(test_tree())));
+        assert_eq!(has_path_sum(t, 10), false)
     }
 }
